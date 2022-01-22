@@ -46,12 +46,12 @@ const wMemoContract = new ethers.Contract(
 
 const main = async () => {
     const tokenBalance = await automation.getTokenBalance(wMemoContract, signer); // wMemoContract
-    const tokenAmountToTrade = tokenBalance.mul(rebasePercentDecimal * 10**numDecimalsRebase).mul(percentToSell*10**numDecimalsSell);
+    const tokenAmountToTrade = tokenBalance.mul(rebasePercentDecimal * 10**numDecimalsRebase).mul(percentToSell*10**numDecimalsSell).div(10**(numDecimalsRebase+numDecimalsSell));
     await automation.getTradeAmounts(tokenAmountToTrade, wMEMOAddress, mimAddress, sushiRouterContract); // router contract
     await automation.getTradingPairContract(wMEMOAddress, mimAddress, sushiFactoryContract); // factory contract
     await automation.getTradeDetails(wMemoMimPairContract); // Get the current token reserves and trading price // wmemomim pair contract
     await automation.approveTokenCheck(wMemoContract, sushiRouterContract, signer, tokenAmountToTrade); // wMemoContract, routercontract
-    await automation.performTrade(wallet, wMemoContract, mimAddress, tokenAmountToTrade, sushiRouterContract, sushiRouterAddress, wMEMOAddress); //wmemo contract, router contract
+    //await automation.performTrade(wallet, wMemoContract, mimAddress, tokenAmountToTrade, sushiRouterContract, sushiRouterAddress, wMEMOAddress); //wmemo contract, router contract
 }
 main();
 // TODO: Listen for errors on all contracts that we use while they are active, stop listening after no longer needing the contracts
